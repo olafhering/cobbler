@@ -127,8 +127,10 @@ class TFTPGen:
         distros = os.path.join(dirtree, "images")
         distro_dir = os.path.join(distros, d.name)
         utils.mkdir(distro_dir)
-        self.copy_single_distro_file(d.kernel, distro_dir, symlink_ok)
-        self.copy_single_distro_file(d.initrd, distro_dir, symlink_ok)
+        if d.kernel:
+            self.copy_single_distro_file(d.kernel, distro_dir, symlink_ok)
+        if d.initrd:
+            self.copy_single_distro_file(d.initrd, distro_dir, symlink_ok)
 
     def copy_single_image_files(self, img):
         """
