@@ -189,7 +189,6 @@ def test_breed(cobbler_api, value, expected_exception):
 @pytest.mark.parametrize("value,expected_exception", [
     ([], pytest.raises(TypeError)),
     (False, pytest.raises(TypeError)),
-    ("", pytest.raises(ValueError))
 ])
 def test_initrd(cobbler_api, value, expected_exception):
     # TODO: Create fake initrd so we can set it successfully
@@ -207,7 +206,6 @@ def test_initrd(cobbler_api, value, expected_exception):
 @pytest.mark.parametrize("value,expected_exception", [
     ([], pytest.raises(TypeError)),
     (False, pytest.raises(TypeError)),
-    ("", pytest.raises(ValueError))
 ])
 def test_kernel(cobbler_api, value, expected_exception):
     # TODO: Create fake kernel so we can set it successfully

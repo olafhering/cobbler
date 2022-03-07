@@ -125,8 +125,8 @@ class Distro(item.Item):
         super().check_if_valid()
         if not self.inmemory:
             return
-        if self.kernel is None:
-            raise CX("Error with distro %s - kernel is required" % self.name)
+        if self.kernel is None and self.remote_boot_kernel is None:
+            raise CX("Error with distro %s - either kernel or remote-boot-kernel is required" % self.name)
 
     #
     # specific methods for item.Distro
@@ -171,11 +171,12 @@ class Distro(item.Item):
         """
         if not isinstance(kernel, str):
             raise TypeError("kernel was not of type str")
-        if not utils.find_kernel(kernel):
-            raise ValueError(
-                "kernel not found or it does not match with allowed kernel filename pattern [%s]: %s."
-                % (utils._re_kernel.pattern, kernel)
-            )
+        if kernel:
+            if not utils.find_kernel(kernel):
+                raise ValueError(
+                    "kernel not found or it does not match with allowed kernel filename pattern [%s]: %s."
+                    % (utils._re_kernel.pattern, kernel)
+                )
         self._kernel = kernel
 
     @LazyProperty
@@ -297,12 +298,10 @@ class Distro(item.Item):
         """
         if not isinstance(initrd, str):
             raise TypeError("initrd must be of type str")
-        if not initrd:
-            raise ValueError("initrd not specified")
-        if utils.find_initrd(initrd):
-            self._initrd = initrd
-            return
-        raise ValueError("initrd not found")
+        if initrd:
+            if not utils.find_initrd(initrd):
+                raise ValueError("initrd not found: %s" % initrd)
+        self._initrd = initrd
 
     @LazyProperty
     def remote_grub_kernel(self) -> str:
